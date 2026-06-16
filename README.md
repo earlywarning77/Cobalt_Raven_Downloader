@@ -14,3 +14,7 @@ A Python-based GUI tool for downloading videos from YouTube and other supported 
 🧵 Threaded downloads — UI stays responsive during download
 
 Requirements: Python 3.x · yt-dlp · ffmpeg
+
+![Project Screenshot](1.png)
+
+![Project Screenshot](2.png)
