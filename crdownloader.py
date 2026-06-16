@@ -272,23 +272,33 @@ class VideoDownloader:
 
     def _base_opts(self) -> dict:
         opts = {
-            "ignoreerrors":              True,
-            "no_warnings":               False,
-            "quiet":                     False,
-            "socket_timeout":            30,
-            "retries":                   5,
-            "fragment_retries":          5,
+            "ignoreerrors":               True,
+            "no_warnings":                False,
+            "quiet":                      False,
+            "socket_timeout":             30,
+            "retries":                    5,
+            "fragment_retries":           5,
             "skip_unavailable_fragments": True,
-            "nocheckcertificate":        True,
-            "geo_bypass":                True,
-            "concurrent_fragments":      1,
-            "http_chunk_size":           10 * 1024 * 1024,   # 10 MB
-            "extractor_args":            {"youtube": {"player_client": ["web"]}},
+            "nocheckcertificate":         True,
+            "geo_bypass":                 True,
+            "concurrent_fragments":       1,
+            "http_chunk_size":            10 * 1024 * 1024,
+            # Use default player client; EJS + Node solves the n-challenge
+            "extractor_args": {
+                "youtube": {
+                    "player_client": ["default"],
+                }
+            },
+            # Auto-download EJS challenge solver scripts from GitHub
+            # (equivalent to --remote-components ejs:github on CLI)
+            "remote_components": ["ejs:github"],
+            # Prefer Node.js as JS runtime; falls back to Deno if absent
+            "js_runtimes": {"node": {}, "deno": {}},
             "http_headers": {
                 "User-Agent": (
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                     "AppleWebKit/537.36 (KHTML, like Gecko) "
-                    "Chrome/120.0.0.0 Safari/537.36"
+                    "Chrome/126.0.0.0 Safari/537.36"
                 )
             },
         }
@@ -297,32 +307,37 @@ class VideoDownloader:
         return opts
 
     def get_info_opts(self) -> dict:
-        opts = self._base_opts()
-        opts.update({"dump_single_json": True, "format": None})
-        return opts
-
-    def get_download_opts(self, format_string: str, output_template: str) -> dict:
+        """yt-dlp options for fetching format info (no download)."""
         opts = self._base_opts()
         opts.update({
-            "format":              format_string,
-            "outtmpl":             output_template,
-            "merge_output_format": "mp4",
-            "progress_hooks":      [self.progress_hook],
-            "postprocessors": [],
+            "skip_download": True,
+            "listformats":   False,
         })
         return opts
 
-    def get_audio_opts(self, output_template: str) -> dict:
+    def get_audio_opts(self, output: str) -> dict:
+        """yt-dlp options for audio-only MP3 download."""
         opts = self._base_opts()
         opts.update({
-            "format":          "bestaudio/best",
-            "outtmpl":         output_template,
-            "progress_hooks":  [self.progress_hook],
-            "postprocessors":  [{
+            "format":            "bestaudio/best",
+            "outtmpl":           output,
+            "progress_hooks":    [self.progress_hook],
+            "postprocessors": [{
                 "key":            "FFmpegExtractAudio",
                 "preferredcodec": "mp3",
                 "preferredquality": "192",
             }],
+        })
+        return opts
+
+    def get_download_opts(self, fmt_str: str, output: str) -> dict:
+        """yt-dlp options for a standard video+audio download."""
+        opts = self._base_opts()
+        opts.update({
+            "format":         fmt_str,
+            "outtmpl":        output,
+            "progress_hooks": [self.progress_hook],
+            "merge_output_format": "mp4",
         })
         return opts
 
