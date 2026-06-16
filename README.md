@@ -1,8 +1,9 @@
 # Cobalt Raven VideoDownloader
 GUI based python video downloader
 
-Advanced Video Downloader
-A Python-based GUI tool for downloading videos from YouTube and other supported sites.
+Cobalt Raven Downloader
+A Python-based GUI tool for downloading videos from popular videos sites and other supported sites.
+- This tool is intended only for downloading your own videos that you have uploaded previously for archival purposes. 
 
 🖥️ Clean tkinter GUI — no command line needed
 📋 Fetches and displays all available formats/resolutions before downloading
