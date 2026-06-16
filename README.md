@@ -29,3 +29,9 @@ And with a url selected
 
 
 ![Project Screenshot 2](2.PNG)
+
+
+
+
+## License
+This project is licensed under the GNU GPLv3 License - see the [LICENSE](LICENSE) file for details.
