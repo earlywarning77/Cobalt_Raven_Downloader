@@ -15,6 +15,14 @@ A Python-based GUI tool for downloading videos from YouTube and other supported 
 
 Requirements: Python 3.x · yt-dlp · ffmpeg
 
+----------------------------------------------------------------
+
+### Download
+[![Download Code](https://img.shields.io/badge/Download-ZIP-blue?logo=github)](https://github.com/earlywarning77/Cobalt_Raven_Downloader/archive/refs/heads/main.zip)
+
+
+----------------------------------------------------------------
+
 ![Project Screenshot 1](1.PNG)
 
 And with a url selected
